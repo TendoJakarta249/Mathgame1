@@ -64,7 +64,9 @@ button{font-family:inherit}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 /* overlays */
-.screen{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:clamp(16px,4vw,28px);background:rgba(4,34,19,.93);overflow-y:auto}
+.screen{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-start;gap:16px;padding:clamp(16px,4vw,28px);background:rgba(4,34,19,.93);overflow-y:auto}
+.screen>:first-child{margin-top:auto}
+.screen>:last-child{margin-bottom:auto}
 .hero{display:flex;align-items:center;justify-content:space-between;gap:14px}
 .eyebrow{margin:0 0 8px;font:600 11px/1 var(--font-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 h1,h2{margin:0;font-family:var(--font-display);font-weight:800;letter-spacing:-.02em;line-height:.98;text-wrap:balance}
@@ -103,6 +105,43 @@ legend{padding:0;margin-bottom:8px;font:600 11px/1 var(--font-body);letter-spaci
 .stats dt{font:600 10.5px/1 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .stats dd{margin:0;font:700 26px/1 var(--font-display);font-variant-numeric:tabular-nums}
 .tag{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:99px;background:var(--amber);color:var(--on-amber);font:700 11px/1 var(--font-body);letter-spacing:.04em;vertical-align:middle}
+
+/* tên người chơi và bảng xếp hạng */
+.field{display:flex;flex-direction:column;gap:8px;max-width:420px}
+.field label{font:600 11px/1 var(--font-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.input{width:100%;height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--ink-2);color:var(--text);font:600 17px/1 var(--font-body)}
+.input::placeholder{color:var(--muted);font-weight:400}
+.input:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-color:var(--amber)}
+.field.bad .input{border-color:var(--coral)}
+.msg{margin:0;font-size:12.5px;line-height:1.35;color:var(--coral)}
+.msg:empty{display:none}
+.rank{margin:12px 0 0;font:700 20px/1.2 var(--font-display);color:var(--text)}
+.rank:empty{display:none}
+.rank b{color:var(--amber);font-weight:800}
+.hint.sub{margin-top:4px}
+.bhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.bhead h2{font-size:clamp(28px,5.5vw,38px)}
+.btn.sm{padding:11px 16px;font-size:14px;white-space:nowrap}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.tab{height:42px;padding:0 8px;border-radius:10px;border:1px solid var(--line-strong);background:var(--ink-2);color:var(--soft);font:700 14px/1 var(--font-display);cursor:pointer}
+.tab:hover{background:var(--ink-3)}
+.tab[aria-selected="true"]{background:var(--ink-3);border-color:var(--amber);box-shadow:inset 0 0 0 1px var(--amber);color:var(--text)}
+.tablewrap{min-width:0;overflow-x:auto}
+.lb{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.lb th{padding:0 8px 8px;font:600 10.5px/1 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;white-space:nowrap}
+.lb th.sc{text-align:right}
+.lb td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:middle}
+.lb .rk{width:3.2rem;font:700 16px/1 var(--font-display);color:var(--muted)}
+.lb tr.top .rk{color:var(--amber)}
+.lb .nm{font:600 15px/1.25 var(--font-body);overflow-wrap:anywhere}
+.lb .lv,.lb .ac{color:var(--soft);font-size:13px;white-space:nowrap}
+.lb .sc{text-align:right;font:700 18px/1 var(--font-display);white-space:nowrap}
+.lb tr.me td{background:var(--ink-3)}
+.lb tr.me .sc{color:var(--amber)}
+.lb tr.sep td{padding:6px 8px;border-top:1px dashed var(--line-strong);font-size:11.5px;color:var(--muted);text-align:center}
+.you{margin-left:8px;padding:2px 7px;border-radius:99px;background:var(--amber);color:var(--on-amber);font:700 10px/1.5 var(--font-body);letter-spacing:.04em;vertical-align:middle}
+.empty{margin:0;padding:18px 4px;color:var(--soft)}
+@media (max-width:560px){.lb .ac{display:none}}
 
 /* answer well, tools, keypad */
 .deck{display:flex;flex-direction:column;gap:8px}
@@ -151,7 +190,12 @@ legend{padding:0;margin-bottom:8px;font:600 11px/1 var(--font-body);letter-spaci
         </div>
         <div class="deco" aria-hidden="true">3 × 4 × 6</div>
       </div>
-      <p class="lead">Mỗi thiên thạch mang một biểu thức. Gõ đúng kết quả để bắn hạ nó trước khi nó chạm thước đo.</p>
+      <p class="lead">Mỗi thiên thạch mang một biểu thức từ 3 số trở lên. Gõ đúng kết quả để bắn hạ nó trước khi nó chạm thước đo.</p>
+      <div class="field" id="nameField">
+        <label for="playerName">Tên người chơi</label>
+        <input class="input" id="playerName" type="text" maxlength="16" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" placeholder="Nhập tên của bạn" aria-describedby="nameMsg">
+        <p class="msg" id="nameMsg" role="alert"></p>
+      </div>
       <fieldset>
         <legend>Chọn chế độ</legend>
         <div class="modes">
@@ -168,6 +212,7 @@ legend{padding:0;margin-bottom:8px;font:600 11px/1 var(--font-body);letter-spaci
       </ul>
       <div class="row2">
         <button class="btn" id="btnStart" type="button">Bắt đầu chơi</button>
+        <button class="btn ghost" id="btnBoardOpen" type="button">Bảng xếp hạng</button>
         <p class="hint">Gõ số trên bàn phím hoặc chạm bàn phím trên màn hình. P hoặc Esc để tạm dừng.</p>
       </div>
     </section>
@@ -187,6 +232,8 @@ legend{padding:0;margin-bottom:8px;font:600 11px/1 var(--font-body);letter-spaci
       <div>
         <p class="eyebrow" id="ovMode">Kết thúc</p>
         <h2 id="ttlOver">Hết lá chắn</h2>
+        <p class="rank" id="ovRank" aria-live="polite"></p>
+        <p class="hint sub" id="ovSave"></p>
       </div>
       <dl class="stats">
         <div><dt>Điểm</dt><dd><span id="ovScore">0</span><span class="tag" id="ovNew" hidden>Kỷ lục mới</span></dd></div>
@@ -199,7 +246,25 @@ legend{padding:0;margin-bottom:8px;font:600 11px/1 var(--font-body);letter-spaci
       <div class="row2">
         <button class="btn" id="btnAgain" type="button">Chơi lại</button>
         <button class="btn ghost" id="btnMenu" type="button">Đổi chế độ</button>
+        <button class="btn ghost" id="btnBoardOver" type="button">Bảng xếp hạng</button>
       </div>
+    </section>
+
+    <section class="screen" id="scrBoard" hidden aria-labelledby="ttlBoard">
+      <div class="bhead">
+        <div>
+          <p class="eyebrow" id="bScope">Bảng chung</p>
+          <h2 id="ttlBoard">Bảng xếp hạng</h2>
+        </div>
+        <button class="btn ghost sm" id="btnBoardBack" type="button">Quay lại</button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Chế độ chơi">
+        <button class="tab" role="tab" type="button" id="tab-add" data-mode="add" aria-selected="false">Cộng</button>
+        <button class="tab" role="tab" type="button" id="tab-mul" data-mode="mul" aria-selected="false">Nhân</button>
+        <button class="tab" role="tab" type="button" id="tab-mixed" data-mode="mixed" aria-selected="true">Tổng hợp</button>
+      </div>
+      <div class="tablewrap" id="bBody" role="tabpanel"></div>
+      <p class="hint" id="bNote"></p>
     </section>
   </main>
 
@@ -317,7 +382,7 @@ const REDUCED=!!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduc
 const cv=$('cv'), ctx=cv.getContext('2d'), stage=$('stage');
 const elScore=$('score'), elLevel=$('level'), elBar=$('lvlbar'), elPips=$('pips');
 const elAns=$('ans'), elAnsBox=$('answerBox');
-const scrStart=$('scrStart'), scrPause=$('scrPause'), scrOver=$('scrOver');
+const scrStart=$('scrStart'), scrPause=$('scrPause'), scrOver=$('scrOver'), scrBoard=$('scrBoard');
 const btnPause=$('btnPause'), btnSound=$('btnSound');
 
 const css=getComputedStyle(document.documentElement);
@@ -343,10 +408,7 @@ const KIND={
 };
 
 /* ---------- storage (optional) ---------- */
-const BEST_KEY='mua-thien-thach-best-v2', SND_KEY='mua-thien-thach-sound';
-let BEST={add:0, mul:0, mixed:0};
-try{ const s=JSON.parse(localStorage.getItem(BEST_KEY)||'{}'); for(const k in BEST){ if(Number.isFinite(s[k])) BEST[k]=s[k]; } }catch(e){}
-function saveBest(){ try{ localStorage.setItem(BEST_KEY, JSON.stringify(BEST)); }catch(e){} }
+const SND_KEY='mua-thien-thach-sound', NAME_KEY='mua-thien-thach-name', LOCAL_KEY='mua-thien-thach-local-v1';
 let soundOn=true;
 try{ soundOn=localStorage.getItem(SND_KEY)!=='0'; }catch(e){}
 
@@ -416,12 +478,6 @@ function updateHUD(){
 function renderAnswer(){
   elAns.textContent=G.buf;
   elAnsBox.classList.toggle('bad',G.bad);
-}
-function refreshBest(){
-  for(const m in MODES){
-    const el=$('best-'+m);
-    el.textContent=BEST[m]>0 ? 'Kỷ lục '+fmt(BEST[m]) : 'Chưa có kỷ lục';
-  }
 }
 function syncSoundBtn(){
   btnSound.classList.toggle('muted',!soundOn);
@@ -632,20 +688,256 @@ function updatePlay(dt){
   }
 }
 
+/* ---------- bảng xếp hạng: dùng chung qua db, hoặc lưu trên máy khi chưa có quyền ---------- */
+const MODE_KEYS=['add','mul','mixed'];
+const BOARD_LIMIT=50, SHOW_TOP=10, NAME_MAX=16;
+const nameInput=$('playerName');
+let RUN=null, boardMode='mixed', boardFrom='start';
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const mk=(tag,cls,text)=>{ const n=document.createElement(tag); if(cls) n.className=cls; if(text!=null) n.textContent=text; return n; };
+const clampInt=(v,a,b)=>Math.max(a,Math.min(b,Math.round(Number(v)||0)));
+const cleanName=s=>String(s==null?'':s).normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim().slice(0,NAME_MAX);
+const nameKey=s=>cleanName(s).toLowerCase();
+/* dữ liệu từ bảng chung do người khác ghi: luôn ép về kiểu an toàn trước khi dùng */
+function cleanEntry(id,o){
+  o=(o&&typeof o==='object')?o:{};
+  return {
+    id:String(id),
+    name:cleanName(o.name)||'Ẩn danh',
+    score:clampInt(o.score,0,9999999),
+    level:clampInt(o.level,1,99),
+    kills:clampInt(o.kills,0,99999),
+    acc:clampInt(o.acc,0,100),
+    combo:clampInt(o.combo,0,9999),
+    plays:clampInt(o.plays,0,99999),
+    at:clampInt(o.at,0,8.64e15)
+  };
+}
+const cmpEntry=(a,b)=>(b.score-a.score)||(a.at-b.at)||a.name.localeCompare(b.name,'vi');
+const bodyOf=e=>({name:e.name,score:e.score,level:e.level,kills:e.kills,acc:e.acc,combo:e.combo,plays:e.plays,at:e.at});
+
+const Board={
+  ready:false, kind:'local', db:null, uid:null, note:'', readyP:null, offs:[],
+  local:{add:[],mul:[],mixed:[]},
+  remote:{add:[],mul:[],mixed:[]},
+  own:{add:null,mul:null,mixed:null},
+  loaded:{add:false,mul:false,mixed:false},
+  ownLoaded:{add:false,mul:false,mixed:false},
+  rows(m){ return this.kind==='local' ? this.local[m] : this.remote[m]; },
+  sorted(m){ return this.rows(m).slice().sort(cmpEntry); },
+  loading(m){ return this.kind!=='local' && !(this.loaded[m] && (this.ownLoaded[m] || !this.uid)); },
+  myId(name){ return this.kind==='local' ? nameKey(name) : this.uid; },
+  mine(m,name){
+    if(this.kind==='local'){ const id=nameKey(name); return id ? (this.local[m].find(r=>r.id===id)||null) : null; }
+    if(!this.uid) return null;
+    const o=this.own[m]; if(o && o.score>0) return o;
+    return this.remote[m].find(r=>r.id===this.uid)||null;
+  }
+};
+const curName=()=>cleanName(nameInput.value)||cleanName(G.player);
+
+function loadLocal(){
+  try{
+    const s=JSON.parse(localStorage.getItem(LOCAL_KEY)||'{}');
+    for(const m of MODE_KEYS){
+      const a=Array.isArray(s[m])?s[m]:[];
+      Board.local[m]=a.slice(0,200).map(o=>cleanEntry(o&&o.id!=null?o.id:nameKey(o&&o.name),o)).filter(e=>e.score>0);
+    }
+  }catch(e){}
+}
+function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY,JSON.stringify(Board.local)); }catch(e){} }
+function mergeRemote(m,entry){
+  const a=Board.remote[m], i=a.findIndex(r=>r.id===entry.id);
+  if(i>=0) a[i]=entry; else a.push(entry);
+}
+
+function subscribeRemote(){
+  const fail=()=>{
+    Board.offs.forEach(f=>{ try{ f(); }catch(e){} }); Board.offs=[];
+    Board.kind='local'; Board.note='Chưa kết nối được bảng chung.';
+    renderAll();
+  };
+  for(const m of MODE_KEYS){
+    const col='lb_'+m;
+    Board.offs.push(Board.db.collection(col).orderBy('score','desc').limit(BOARD_LIMIT).onSnapshot(snap=>{
+      Board.remote[m]=snap.docs.map(d=>cleanEntry(d.id,d.data())).filter(e=>e.score>0);
+      Board.loaded[m]=true; renderAll();
+    },fail));
+    if(Board.uid){
+      Board.offs.push(Board.db.doc(col+'/'+Board.uid).onSnapshot(s=>{
+        Board.own[m]=s.exists?cleanEntry(Board.uid,s.data()):null;
+        Board.ownLoaded[m]=true; renderAll();
+      },fail));
+    }
+  }
+}
+async function initBoard(){
+  loadLocal();
+  try{
+    const c=window.claude;
+    if(c && typeof c.use==='function'){
+      const [db,user]=await Promise.all([c.use('db'),c.use('user')]);
+      if(db){
+        let uid=null, can=null;
+        try{ if(user){ uid=await user.id(); can=await user.can('data.write'); } }catch(e){}
+        Board.db=db; Board.uid=uid;
+        Board.kind=(uid && can!==false)?'shared':'readonly';
+        subscribeRemote();
+      }
+    }
+  }catch(e){ Board.kind='local'; }
+  Board.ready=true;
+  renderAll();
+}
+
+/* ghi điểm sau mỗi ván; trả về kết quả để màn hình kết thúc hiển thị */
+async function submitScore(mode,name,rec){
+  await Board.readyP;
+  const nm=cleanName(name)||'Ẩn danh';
+  const readonly=()=>({where:'shared',saved:false,reason:'readonly',prevBest:(Board.mine(mode,nm)||{}).score||0,isNew:false,entry:null});
+  if(!(rec.score>0)) return {where:'none',saved:false,reason:'zero',prevBest:(Board.mine(mode,nm)||{}).score||0,isNew:false,entry:null};
+  const now=Date.now();
+  if(Board.kind==='local'){
+    const id=nameKey(nm), arr=Board.local[mode];
+    let e=arr.find(x=>x.id===id); const prev=e?e.score:0;
+    if(!e){ e=cleanEntry(id,{name:nm,...rec,plays:1,at:now}); arr.push(e); }
+    else{
+      const i=arr.indexOf(e), plays=e.plays+1;
+      e=rec.score>e.score ? cleanEntry(id,{name:nm,...rec,plays,at:now}) : cleanEntry(id,{...e,name:nm,plays});
+      arr[i]=e;
+    }
+    arr.sort(cmpEntry); if(arr.length>200) arr.length=200;
+    saveLocal(); renderAll();
+    return {where:'local',saved:true,reason:null,prevBest:prev,isNew:rec.score>prev,entry:e};
+  }
+  if(Board.kind==='readonly') return readonly();
+  const ref=Board.db.doc('lb_'+mode+'/'+Board.uid);
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const snap=await ref.get();
+      const prevE=snap.exists?cleanEntry(Board.uid,snap.data()):null;
+      const prev=prevE?prevE.score:0;
+      let entry;
+      if(!prevE || rec.score>prev){
+        entry=cleanEntry(Board.uid,{name:nm,...rec,plays:(prevE?prevE.plays:0)+1,at:now});
+        await ref.set(bodyOf(entry));
+      } else {
+        entry=cleanEntry(Board.uid,{...prevE,name:nm,plays:prevE.plays+1});
+        await ref.update({name:nm,plays:entry.plays});
+      }
+      Board.own[mode]=entry; mergeRemote(mode,entry); renderAll();
+      return {where:'shared',saved:true,reason:null,prevBest:prev,isNew:rec.score>prev,entry};
+    }catch(e){
+      const code=e&&e.code;
+      if(code==='unavailable' && attempt===0){ await sleep(300+Math.random()*400); continue; }
+      if(code==='invalid_argument'){ Board.kind='readonly'; renderAll(); return readonly(); }
+      return {where:'shared',saved:false,reason:'error',prevBest:0,isNew:false,entry:null};
+    }
+  }
+}
+
+function rankInfo(m,e){
+  const rows=Board.rows(m).filter(r=>r.id!==e.id);
+  const ahead=rows.filter(r=>cmpEntry(r,e)<0).length;
+  const capped=Board.kind!=='local' && Board.rows(m).length>=BOARD_LIMIT;
+  return {rank:ahead+1, total:rows.length+1, capped, outside:capped && ahead>=BOARD_LIMIT};
+}
+const rankText=ri=>ri.outside ? 'ngoài top '+BOARD_LIMIT : 'hạng '+ri.rank+'/'+ri.total+(ri.capped?'+':'');
+
+function renderCards(){
+  const name=cleanName(nameInput.value);
+  for(const m of MODE_KEYS){
+    const out=$('best-'+m);
+    if(!Board.ready){ out.textContent=''; continue; }
+    if(Board.loading(m)){ out.textContent='Đang tải…'; continue; }
+    const e=Board.mine(m,name);
+    out.textContent=e ? fmt(e.score)+' điểm · '+rankText(rankInfo(m,e)) : 'Chưa có điểm';
+  }
+}
+function renderBoard(){
+  if(scrBoard.hidden) return;
+  const m=boardMode;
+  for(const k of MODE_KEYS){ const t=$('tab-'+k), on=k===m; t.setAttribute('aria-selected',String(on)); t.tabIndex=on?0:-1; }
+  $('bBody').setAttribute('aria-labelledby','tab-'+m);
+  $('bScope').textContent=Board.kind==='shared'?'Bảng chung · mọi người chơi':Board.kind==='readonly'?'Bảng chung · chỉ xem':'Bảng trên máy này';
+  $('bNote').textContent=Board.kind==='shared'?'Mỗi tài khoản một dòng, tính điểm cao nhất của mỗi người.'
+    :Board.kind==='readonly'?'Bạn chỉ có quyền xem nên điểm của bạn không lên bảng này.'
+    :'Điểm chỉ lưu trên thiết bị này.'+(Board.note?' '+Board.note:'');
+  const body=$('bBody'); body.textContent='';
+  if(!Board.ready || Board.loading(m)){ body.appendChild(mk('p','empty','Đang tải bảng xếp hạng…')); return; }
+  const list=Board.sorted(m);
+  if(!list.length){ body.appendChild(mk('p','empty','Chưa có ai trên bảng này. Chơi một ván để ghi tên đầu tiên.')); return; }
+  const name=curName(), meId=Board.myId(name);
+  const tbl=mk('table','lb'), thead=mk('thead'), hr=mk('tr');
+  [['Hạng','rk'],['Tên','nm'],['Cấp','lv'],['Chính xác','ac'],['Điểm','sc']].forEach(([t,c])=>{ const th=mk('th',c,t); th.scope='col'; hr.appendChild(th); });
+  thead.appendChild(hr); tbl.appendChild(thead);
+  const tb=mk('tbody');
+  const addRow=(e,rk,top)=>{
+    const me=!!meId && e.id===meId;
+    const tr=mk('tr',(top?'top ':'')+(me?'me':''));
+    tr.appendChild(mk('td','rk',rk));
+    const nm=mk('td','nm',e.name); if(me) nm.appendChild(mk('span','you','Bạn')); tr.appendChild(nm);
+    tr.appendChild(mk('td','lv',String(e.level)));
+    tr.appendChild(mk('td','ac',e.acc+'%'));
+    tr.appendChild(mk('td','sc',fmt(e.score)));
+    tb.appendChild(tr);
+  };
+  list.slice(0,SHOW_TOP).forEach((e,i)=>addRow(e,String(i+1),i<3));
+  const mi=meId?list.findIndex(e=>e.id===meId):-1;
+  const extra=mi>=SHOW_TOP?{e:list[mi],rk:String(mi+1)}:(mi<0&&meId?(()=>{ const o=Board.mine(m,name); return o?{e:o,rk:BOARD_LIMIT+'+'}:null; })():null);
+  if(extra){
+    const sep=mk('tr','sep'), td=mk('td',null,'Vị trí của bạn'); td.colSpan=5; sep.appendChild(td); tb.appendChild(sep);
+    addRow(extra.e,extra.rk,false);
+  }
+  tbl.appendChild(tb); body.appendChild(tbl);
+}
+function renderOver(){
+  if(!RUN) return;
+  const rankEl=$('ovRank'), saveEl=$('ovSave'), r=RUN.res;
+  rankEl.textContent='';
+  if(!r){ saveEl.textContent='Đang lưu điểm…'; return; }
+  $('ovNew').hidden=!r.isNew;
+  $('ovBest').textContent=fmt(Math.max(r.prevBest,RUN.rec.score));
+  if(r.saved && r.entry){
+    const ri=rankInfo(RUN.mode,r.entry);
+    if(ri.outside){ rankEl.textContent='Ngoài top '+BOARD_LIMIT; }
+    else rankEl.append('Hạng ',mk('b',null,String(ri.rank)),' / '+ri.total+(ri.capped?'+':'')+(r.where==='local'?' người chơi trên máy này':' người chơi'));
+    saveEl.textContent=r.isNew
+      ? (r.where==='shared'?'Đã lưu kỷ lục mới vào bảng chung.':'Đã lưu kỷ lục mới trên máy này.')
+      : 'Điểm cao nhất của bạn vẫn là '+fmt(r.prevBest)+'.';
+  } else if(r.reason==='zero'){ saveEl.textContent='Ván này 0 điểm nên chưa vào bảng.'; }
+  else if(r.reason==='readonly'){ saveEl.textContent='Bạn chỉ có quyền xem nên điểm không được ghi lên bảng chung.'; }
+  else { saveEl.textContent='Chưa lưu được điểm lên bảng chung. Hãy thử lại sau.'; }
+}
+function renderAll(){ renderCards(); renderBoard(); if(G.state==='over') renderOver(); }
+
+function openBoard(from,mode){
+  boardFrom=from; boardMode=mode;
+  scrStart.hidden=true; scrOver.hidden=true; scrBoard.hidden=false;
+  renderBoard();
+  const t=$('tab-'+boardMode); if(t) t.focus();
+}
+function closeBoard(){
+  scrBoard.hidden=true;
+  if(boardFrom==='over' && G.state==='over'){ scrOver.hidden=false; $('btnBoardOver').focus(); }
+  else { scrStart.hidden=false; $('btnBoardOpen').focus(); }
+}
+
 /* ---------- screens ---------- */
 function startGame(){
   resetGame();
   G.state='playing';
-  scrStart.hidden=true; scrPause.hidden=true; scrOver.hidden=true;
+  scrStart.hidden=true; scrPause.hidden=true; scrOver.hidden=true; scrBoard.hidden=true; RUN=null;
   btnPause.disabled=false;
   if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
 }
 function toMenu(){
   G.state='menu';
-  scrStart.hidden=false; scrPause.hidden=true; scrOver.hidden=true;
+  scrStart.hidden=false; scrPause.hidden=true; scrOver.hidden=true; scrBoard.hidden=true;
   btnPause.disabled=true;
   G.rocks=[]; G.buf=''; G.bad=false; renderAnswer();
-  refreshBest();
+  renderCards();
 }
 function pause(){
   if(G.state!=='playing') return;
@@ -662,18 +954,24 @@ function gameOver(){
   G.state='over';
   btnPause.disabled=true;
   G.buf=''; G.bad=false; renderAnswer();
-  const prev=BEST[G.mode]||0, isNew=G.score>prev;
-  if(isNew){ BEST[G.mode]=G.score; saveBest(); }
   const tot=G.hits+G.misses, acc=tot?Math.round(G.hits/tot*100):100;
-  $('ovMode').textContent=MODES[G.mode];
-  $('ovScore').textContent=fmt(G.score);
-  $('ovNew').hidden=!isNew;
-  $('ovBest').textContent=fmt(BEST[G.mode]);
-  $('ovLevel').textContent=String(G.level);
-  $('ovKills').textContent=fmt(G.kills);
+  const run={mode:G.mode, name:G.player||cleanName(nameInput.value), res:null,
+    rec:{score:G.score, level:G.level, kills:G.kills, acc, combo:G.bestCombo}};
+  RUN=run;
+  $('ovMode').textContent=MODES[run.mode]+' · '+run.name;
+  $('ovScore').textContent=fmt(run.rec.score);
+  $('ovNew').hidden=true;
+  $('ovBest').textContent='—';
+  $('ovLevel').textContent=String(run.rec.level);
+  $('ovKills').textContent=fmt(run.rec.kills);
   $('ovAcc').textContent=acc+'%';
-  $('ovCombo').textContent=String(G.bestCombo);
+  $('ovCombo').textContent=String(run.rec.combo);
+  renderOver();
   SFX.over();
+  submitScore(run.mode,run.name,run.rec).then(
+    res=>{ if(RUN===run){ run.res=res; renderOver(); } },
+    ()=>{ if(RUN===run){ run.res={where:'shared',saved:false,reason:'error',prevBest:0,isNew:false,entry:null}; renderOver(); } }
+  );
   setTimeout(()=>{ if(G.state==='over'){ scrOver.hidden=false; $('btnAgain').focus(); } },900);
 }
 
@@ -868,6 +1166,7 @@ function frame(t){
 window.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
   const k=e.key;
+  if(!scrBoard.hidden){ if(k==='Escape'){ e.preventDefault(); closeBoard(); } return; }
   if(G.state==='playing'){
     if(/^[0-9]$/.test(k)){ e.preventDefault(); if(!e.repeat) press(k); }
     else if(k==='Backspace'){ e.preventDefault(); backspace(); }
@@ -895,11 +1194,35 @@ addKey(BACK,'util',backspace,'Xóa một số');
 ['6','7','8','9','0'].forEach(d=>addKey(d,'',()=>press(d)));
 addKey('Xóa','util',clearBuf,'Xóa hết');
 
+function selMode(){ const s=document.querySelector('input[name="mode"]:checked'); return s?s.value:'mixed'; }
+function setNameError(msg){
+  $('nameField').classList.toggle('bad',!!msg);
+  $('nameMsg').textContent=msg||'';
+  nameInput.setAttribute('aria-invalid',msg?'true':'false');
+}
 $('btnStart').addEventListener('click',()=>{
+  const nm=cleanName(nameInput.value);
+  if(!nm){ setNameError('Nhập tên của bạn để bắt đầu.'); nameInput.focus(); return; }
+  setNameError('');
+  nameInput.value=nm;
+  try{ localStorage.setItem(NAME_KEY,nm); }catch(e){}
   audio();
-  const sel=document.querySelector('input[name="mode"]:checked');
-  G.mode=sel?sel.value:'mixed';
+  G.mode=selMode(); G.player=nm;
   startGame();
+});
+nameInput.addEventListener('input',()=>{ if(nameInput.value) setNameError(''); renderCards(); });
+nameInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('btnStart').click(); } });
+$('btnBoardOpen').addEventListener('click',()=>openBoard('start',selMode()));
+$('btnBoardOver').addEventListener('click',()=>openBoard('over',RUN?RUN.mode:G.mode));
+$('btnBoardBack').addEventListener('click',closeBoard);
+const tabEls=MODE_KEYS.map(k=>$('tab-'+k));
+tabEls.forEach((t,i)=>{
+  t.addEventListener('click',()=>{ boardMode=t.dataset.mode; renderBoard(); });
+  t.addEventListener('keydown',e=>{
+    let j;
+    if(e.key==='ArrowRight') j=(i+1)%tabEls.length; else if(e.key==='ArrowLeft') j=(i+tabEls.length-1)%tabEls.length; else return;
+    e.preventDefault(); boardMode=MODE_KEYS[j]; renderBoard(); tabEls[j].focus();
+  });
 });
 $('btnAgain').addEventListener('click',()=>{ audio(); startGame(); });
 $('btnMenu').addEventListener('click',toMenu);
@@ -916,9 +1239,10 @@ btnSound.addEventListener('click',()=>{
 
 /* ---------- boot ---------- */
 syncSoundBtn();
-refreshBest();
+try{ nameInput.value=cleanName(localStorage.getItem(NAME_KEY)); }catch(e){}
 updateHUD();
 resize();
+Board.readyP=initBoard();
 requestAnimationFrame(frame);
 })();
 </script>
